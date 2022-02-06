@@ -1,0 +1,26 @@
+import os 
+from utils.crossCorrelation import *
+import numpy as np
+import cv2
+
+def get_best_exemplar(image, exemplar_directory):
+
+    exemplar_files = [str(exemplar_directory) + "/" + ele for ele in list(os.listdir(exemplar_directory))]
+    
+    best_result = 0
+    best_exemplar = np.zeros(shape=(500,500))
+    
+    for file_path in exemplar_files:
+        exemplar = cv2.imread(file_path)
+        gray_exemplar = cv2.cvtColor(exemplar, cv2.COLOR_RGB2GRAY)
+
+        curr_result = get_cross_correlation(image, gray_exemplar)
+        
+        if (curr_result > best_result):
+            best_result = curr_result
+            best_exemplar = exemplar
+            
+        
+    return best_exemplar
+
+    
